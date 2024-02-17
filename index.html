@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <!-- Bootstrap Icon -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet" />
     <!-- My Css -->
     <link rel="stylesheet" href="style.css" />
   </head>
@@ -153,20 +154,33 @@
         </div>
         <div class="row justify-content-center mb-3">
           <div class="col-md-6">
-            <form>
+            <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+              <symbol id="check-circle-fill" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+              </symbol>
+            </svg>
+            <div class="alert alert-success d-flex align-items-center d-none" role="alert">
+              <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"></use></svg>
+              <div>Data anda sudah terkirim</div>
+            </div>
+            <form name="contact-portofolio">
               <div class="mb-3">
                 <label for="Nama" class="form-label">Name</label>
-                <input type="text" class="form-control" id="name" />
+                <input type="text" class="form-control" id="name" name="nama" />
               </div>
               <div class="mb-3">
                 <label for="Email" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="email" aria-describedby="" />
+                <input type="email" class="form-control" id="email" aria-describedby="" name="email" />
               </div>
               <div class="mb-3">
                 <label for="pesan" class="form-label">Pesan</label>
-                <textarea class="form-control" id="pesan" rows="3"></textarea>
+                <textarea class="form-control" id="pesan" rows="3" name="pesan"></textarea>
               </div>
-              <button type="submit" class="btn btn-danger">Submit</button>
+              <button type="submit" class="btn btn-primary btn-kirim">Kirim</button>
+              <button class="btn btn-primary btn-loading d-none" type="button" disabled>
+                <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
+                <span role="status">Memutar...</span>
+              </button>
             </form>
           </div>
         </div>
@@ -179,13 +193,36 @@
         ></path>
       </svg>
     </section>
-
+    <!-- Akhir Contact -->
     <!-- Footer -->
     <footer class="bg-primary text-bg-primary text-center fs-5 pb-5">
       <p>Created by : <i class="bi bi-patch-check-fill"></i> <a href="https://www.instagram.com/jayyidin" class="fw-bold link-light">Juman Jayyidin</a></p>
     </footer>
     <!-- Akhir Footer -->
-    <!-- Akhir Contact -->
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <script>
+      const scriptURL = "https://script.google.com/macros/s/AKfycbyyW2g7_u3x2BS3jFVN-RCR1vse82uOUg1jcVy13EJGXnatnSoCPNz0nR_0Lc6XneRDzw/exec";
+      const form = document.forms["contact-portofolio"];
+      const btnKirim = document.querySelector(".btn-kirim");
+      const btnLoading = document.querySelector(".btn-loading");
+      const alert = document.querySelector(".alert");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        btnKirim.classList.toggle("d-none");
+        btnLoading.classList.toggle("d-none");
+        fetch(scriptURL, { method: "POST", body: new FormData(form) })
+          .then((response) => {
+            console.log("Success!", response);
+            btnKirim.classList.toggle("d-none");
+            btnLoading.classList.toggle("d-none");
+            alert.classList.toggle("d-none");
+            form.reset();
+          })
+          .catch((error) => console.error("Error!", error.message));
+      });
+    </script>
   </body>
 </html>
